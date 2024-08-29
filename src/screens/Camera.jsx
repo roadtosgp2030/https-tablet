@@ -24,20 +24,23 @@ const Camera = () => {
     const canvasRef = useRef();
     const { images, addImage } = useTempImagesContext();
     const { setIsCapture } = useCaptureContext()
+    const localStreamRef = useRef()
+    const [currentCamera, setCurrentCamera] = useState('environment')
 
     useEffect(() => {
         const constraints = {
             video: {
-                facingMode: { exact: 'environment'}
+                // width: { min: 1024, ideal: 1280, max: 1920 },
+                // height: { min: 576, ideal: 720, max: 1080 },
+                facingMode: { exact: currentCamera}
             },
             // width: 640,
             // height: 832
         };
-        let localStream;
         navigator.mediaDevices
             .getUserMedia(constraints)
             .then((mediaStream) => {
-                localStream = mediaStream;
+                localStreamRef.current = mediaStream;
                 videoRef.current.srcObject = mediaStream;
             })
             .catch(() => {
@@ -45,12 +48,16 @@ const Camera = () => {
             });
 
         return () => {
-            if (localStream) {
-                const tracks = localStream.getTracks();
+            if (localStreamRef.current) {
+                const tracks = localStreamRef.current.getTracks();
                 tracks.forEach((track) => track.stop());
             }
         };
-    }, [navigate]);
+    }, [navigate,currentCamera]);
+
+    const switchCamera = () => {
+        setCurrentCamera(prev => prev === 'user' ? 'environment' : 'user')
+    }
 
     const saveImage = () => {
         // handle save images to database
@@ -84,7 +91,9 @@ const Camera = () => {
                     <img src={leftArrowWhite} alt="left arrow" />
                     Camera
                 </button>
-                <img src={rotateCamera} alt="rotate camera" className="w-10" />
+                <button onClick={switchCamera}>
+                    <img src={rotateCamera} alt="rotate camera" className="w-10" />
+                </button>
             </Header>
 
             <video ref={videoRef} autoPlay className="flex-grow object-cover w-full"></video>
