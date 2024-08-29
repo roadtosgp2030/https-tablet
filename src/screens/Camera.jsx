@@ -28,7 +28,7 @@ const Camera = () => {
     useEffect(() => {
         const constraints = {
             video: {
-                facingMode: { exact: 'environment' }
+                facingMode: { exact: 'environment'}
             },
             // width: 640,
             // height: 832
@@ -87,7 +87,7 @@ const Camera = () => {
                 <img src={rotateCamera} alt="rotate camera" className="w-10" />
             </Header>
 
-            <video ref={videoRef} autoPlay className="flex-grow object-cover w-full h-full"></video>
+            <video ref={videoRef} autoPlay className="flex-grow object-cover w-full"></video>
 
             <canvas
                 id="canvas"
