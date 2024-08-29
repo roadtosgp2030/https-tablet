@@ -75,7 +75,7 @@ const Camera = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col relative">
+        <div className="h-dvh flex flex-col relative">
             <Header className="text-white font-bold text-xl bg-slate-900 justify-between items-center">
                 <button
                     onClick={() => navigate("..")}
